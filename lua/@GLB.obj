@@ -1,0 +1,4 @@
+@ƒJƒƒ‰İ’è
+--dialog:ˆÊ’u,p={0.0, 0.0, 0.0};–Ú•W,t={0.0, 0.0, 0.0};ŒX‚«,r=0.0;‹–ìŠp,f=45.0;
+obj.setoption("drawtarget", "tempbuffer", 1, 1)
+obj.load("tempbuffer")

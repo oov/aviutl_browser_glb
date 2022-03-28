@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<title>@GLB %%VERSION%%</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<style>
+* {
+  padding: 0;
+  margin: 0;
+}
+canvas {
+  display: block;
+}
+</style>
+<body>
+<script src="libs/libktx.js"></script>
+<script type="module">
+import { load, setCamera, render } from './main.js';
+
+let file = "a";
+let state = null;
+let position = null;
+let target = null;
+AviUtlBrowser.registerRenderer(async params => {
+  if (file !== params.userfile) {
+    file = params.userfile;
+    if (file == null) {
+      state = await load(null, null);
+    } else {
+      state = await load(await fetch('/userfile').then(r => r.arrayBuffer()), {
+        hdr: await fetch('/assets/studio_small_08_4k.hdr').then(r => r.arrayBuffer()),
+        luts:{
+          lut_ggx_file: '/assets/lut_ggx.png',
+          lut_charlie_file: '/assets/lut_charlie.png',
+          lut_sheen_E_file: '/assets/lut_sheen_E.png',
+        },
+      });
+      state.renderingParameters.renderEnvironmentMap = false;
+    }
+    position = state.userCamera.getPosition();
+    target = state.userCamera.getTarget();
+    window.state = state;
+  }
+
+  const [t, px, py, pz, tx, ty, tz, r, fov] = params.param.split(" ").map((v, idx) => parseFloat(v));
+  if (t) {
+    state.animationTimer.setFixedTime(t);
+  } else {
+    state.animationTimer.paused = true;
+    state.animationTimer.pausedTime = 0;
+  }
+  setCamera(state,
+    [position[0] + px, position[1] + py, position[2] + pz],
+    [target[0] + tx, target[1] + ty, target[2] + tz],
+    r*Math.PI/180);
+  state.userCamera.setVerticalFoV(fov*Math.PI/180);
+  render(state);
+  return '';
+});
+</script>
+</body>
+</html>

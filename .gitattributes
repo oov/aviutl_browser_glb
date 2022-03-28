@@ -1,0 +1,4 @@
+README.in.md text eol=crlf
+README.md    text eol=crlf
+@GLB.anm     text eol=crlf
+@GLB.obj     text eol=crlf

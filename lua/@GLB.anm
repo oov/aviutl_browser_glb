@@ -1,0 +1,16 @@
+@描画
+--check0:DevTools,0
+--file:
+tonumber(nil)
+
+-- 画面と同じサイズの空の画像を用意する
+obj.setoption("drawtarget", "tempbuffer", obj.screen_w, obj.screen_h)
+obj.load("tempbuffer")
+
+require("browser").execute({
+  dir = "GLB",
+  tabid = "",
+  param = string.format("%f %f %f %f %f %f %f %f %f", obj.time, p[1], p[2], p[3], t[1], t[2], t[3], r, f),
+  userfile = file,
+  dev = obj.check0,
+});
