@@ -17,15 +17,15 @@ const insertLicenses = async (readme) => {
       if (r.status !== 200) {
         throw "failed to receive license file for draco3d";
       }
-      readme.push(r.data.replace("\r", "").trim());
+      readme.push(r.data.replace(/\r\n/g, "\n").replace(/\n/g, "\r\n").trim());
     } else {
-      readme.push(fs.readFileSync(l.licenseFile, 'utf8').toString().replace("\r", "").trim());
+      readme.push(fs.readFileSync(l.licenseFile, 'utf8').toString().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n").trim());
     }
     readme.push("");
   }
 };
 
-const lines = fs.readFileSync(__dirname + "/../README.in.md", 'utf8').toString().split("\n");
+const lines = fs.readFileSync(__dirname + "/../README.in.md", 'utf8').toString().replace(/\r\n/g, "\n").split("\n");
 const readme = [];
 for (let line of lines) {
   if (line == "`make-readme.js inserts the license information for the dependent libraries`") {
@@ -38,5 +38,5 @@ for (let line of lines) {
   readme.push(line);
 }
 
-console.log(readme.join("\n").trim());
+console.log(readme.join("\r\n").trim());
 })();
