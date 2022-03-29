@@ -1,0 +1,58 @@
+name: releaser
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+alpha[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+beta[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+rc[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install
+      - run: npm run gen-readme
+      - run: npm run build
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
+      - name: Zip
+        run: |
+          cd dist && zip -r ../aviutl_browser_glb.zip * && cd ..
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+          body: |
+            ### ダウンロード
+            
+            - [aviutl_browser_glb_${{ steps.get_version.outputs.tag }}.zip](https://github.com/oov/aviutl_browser_glb/releases/download/${{ steps.get_version.outputs.tag }}/aviutl_browser_glb_${{ steps.get_version.outputs.tag }}.zip)
+            
+            ### 変更点
+            
+            - ＊＊＊＊
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./aviutl_browser_glb.zip
+          asset_name: aviutl_browser_glb_${{ steps.get_version.outputs.tag }}.zip
+          asset_content_type: application/zip
