@@ -10,7 +10,7 @@ obj.load("tempbuffer")
 require("browser").execute({
   dir = "GLB",
   tabid = "",
-  param = string.format("%f %f %f %f %f %f %f %f %f %f", obj.layer, obj.time, p[1], p[2], p[3], t[1], t[2], t[3], r, f),
+  param = string.format("%f %f %f %f %f %f %f %f %f %f %f", obj.layer, obj.time, p[1], p[2], p[3], t[1], t[2], t[3], r, f, a),
   userfile = file,
   dev = obj.check0,
 });

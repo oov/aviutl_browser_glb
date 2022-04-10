@@ -1,4 +1,4 @@
 @カメラ設定
---dialog:位置,p={0.0, 0.0, 0.0};目標,t={0.0, 0.0, 0.0};傾き,r=0.0;視野角,f=45.0;
+--dialog:位置,p={0.0, 0.0, 0.0};目標,t={0.0, 0.0, 0.0};傾き,r=0.0;視野角,f=45.0;最適な初期位置/chk,a=1;
 obj.setoption("drawtarget", "tempbuffer", 1, 1)
 obj.load("tempbuffer")

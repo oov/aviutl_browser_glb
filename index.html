@@ -18,7 +18,7 @@ import { load, setCamera, render } from './main.js';
 
 const layers = window.layers = {};
 AviUtlBrowser.registerRenderer(async params => {
-  const [layer, t, px, py, pz, tx, ty, tz, r, fov] = params.param.split(" ").map((v, idx) => parseFloat(v));
+  const [layer, t, px, py, pz, tx, ty, tz, r, fov, optpos] = params.param.split(" ").map((v, idx) => parseFloat(v));
   const l = layers[layer] = (layers[layer] || {
     state: null,
     position: null,
@@ -51,7 +51,7 @@ AviUtlBrowser.registerRenderer(async params => {
     l.state.animationTimer.pausedTime = 0;
   }
   setCamera(l.state,
-    [l.position[0] + px, l.position[1] + py, l.position[2] + pz],
+    optpos ? [l.position[0] + px, l.position[1] + py, l.position[2] + pz] : [l.target[0] + px, l.target[1] + py, l.target[2] + pz],
     [l.target[0] + tx, l.target[1] + ty, l.target[2] + tz],
     r*Math.PI/180);
     l.state.userCamera.setVerticalFoV(fov*Math.PI/180);
