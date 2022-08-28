@@ -30,7 +30,7 @@ export default {
     copy({
       targets: [
         { src: "README.md", dest: "dist/", rename: "@GLB.txt" },
-        { src: ["lua/@GLB.anm", "lua/@GLB.obj"], dest: "dist/script/browser/" },
+        { src: ["lua/@GLB.anm", "lua/@GLB.obj", "lua/@GLB.exa"], dest: "dist/script/browser/" },
         { src: ["index.html"], dest: "dist/script/browser/contents/GLB/", transform: replaceVersion },
         { src: ["node_modules/@khronosgroup/gltf-viewer/dist/assets", "node_modules/@khronosgroup/gltf-viewer/dist/libs", "node_modules/draco3d/draco_decoder.wasm"], dest: "dist/script/browser/contents/GLB/" },
         { src: ["studio_small_08_4k.hdr"], dest: "dist/script/browser/contents/GLB/assets/" },
