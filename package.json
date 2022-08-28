@@ -10,14 +10,14 @@
   },
   "dependencies": {
     "@khronosgroup/gltf-viewer": "^1.0.9",
-    "draco3d": "^1.5.2"
+    "draco3d": "^1.5.3"
   },
   "author": "oov",
   "license": "MIT",
   "devDependencies": {
     "axios": "^0.26.1",
     "license-checker": "^25.0.1",
-    "rollup": "^2.70.1",
+    "rollup": "^2.78.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-node-builtins": "^2.1.2",
