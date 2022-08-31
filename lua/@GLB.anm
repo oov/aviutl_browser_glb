@@ -7,10 +7,19 @@ tonumber(nil)
 obj.setoption("drawtarget", "tempbuffer", obj.screen_w, obj.screen_h)
 obj.load("tempbuffer")
 
+local param
+if _glb_params.mode == 0 then
+  local p, t = _glb_params.p, _glb_params.t
+  param = string.format("%f %f %f %f\t%f %f %f %f %f %f %f %f", _glb_params.mode, obj.layer, obj.time, _glb_params.f, p[1], p[2], p[3], t[1], t[2], t[3], _glb_params.r, _glb_params.a)
+elseif _glb_params.mode == 1 then
+  local mat = _glb_params.mat
+  param = string.format("%f %f %f %f\t%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f", _glb_params.mode, obj.layer, obj.time, _glb_params.f, mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], mat[12], mat[13], mat[14], mat[15], mat[16])
+end
+_glb_params = nil
 require("browser").execute({
   dir = "GLB",
   tabid = "",
-  param = string.format("%f %f %f %f %f %f %f %f %f %f %f", obj.layer, obj.time, p[1], p[2], p[3], t[1], t[2], t[3], r, f, a),
+  param = param,
   userfile = file,
   dev = obj.check0,
 });

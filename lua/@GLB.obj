@@ -1,4 +1,40 @@
 @カメラ設定
 --dialog:位置,p={0.0, 0.0, 0.0};目標,t={0.0, 0.0, 0.0};傾き,r=0.0;視野角,f=45.0;最適な初期位置/chk,a=1;
+_glb_params = {
+  mode = 0,
+  f = f,
+  p = p,
+  t = t,
+  r = r,
+  a = a,
+}
+obj.setoption("drawtarget", "tempbuffer", 1, 1)
+obj.load("tempbuffer")
+
+@カメラ設定(自動回転)
+--track0:距離,0,10000,5.00,0.01
+--track1:高さ,0,10000,1.00,0.01
+--track2:向き,0,1,0.00,0.01
+--track3:回転速度,0,1000,0.00,0.01
+--dialog:目標,t={0.0, 0.0, 0.0};傾き,r=0.0;視野角,f=45.0;
+local spd = obj.track2*math.pi*2 + obj.time*obj.track3/100
+_glb_params = {
+  mode = 0,
+  f = f,
+  p = {math.cos(spd)*obj.track0, obj.track1, math.sin(spd)*obj.track0},
+  t = t,
+  r = r,
+  a = 0,
+}
+obj.setoption("drawtarget", "tempbuffer", 1, 1)
+obj.load("tempbuffer")
+
+@カメラ設定(行列)
+--dialog:4x4行列,mat={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};視野角,f=45.0;
+_glb_params = {
+  mode = 1,
+  f = f,
+  mat = mat,
+}
 obj.setoption("drawtarget", "tempbuffer", 1, 1)
 obj.load("tempbuffer")

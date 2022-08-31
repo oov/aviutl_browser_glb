@@ -14,11 +14,12 @@ canvas {
 <body>
 <script src="libs/libktx.js"></script>
 <script type="module">
-import { load, setCamera, render } from './main.js';
+import { load, render, glm } from './main.js';
 
 const layers = window.layers = {};
 AviUtlBrowser.registerRenderer(async params => {
-  const [layer, t, px, py, pz, tx, ty, tz, r, fov, optpos] = params.param.split(" ").map((v, idx) => parseFloat(v));
+  const [sparam, vparam] = params.param.split("\t");
+  const [mode, layer, time, fov] = sparam.split(" ").map(v => parseFloat(v));
   const l = layers[layer] = (layers[layer] || {
     state: null,
     position: null,
@@ -44,17 +45,26 @@ AviUtlBrowser.registerRenderer(async params => {
     l.target = l.state.userCamera.getTarget();
   }
 
-  if (t) {
-    l.state.animationTimer.setFixedTime(t);
+  if (time) {
+    l.state.animationTimer.setFixedTime(time);
   } else {
     l.state.animationTimer.paused = true;
     l.state.animationTimer.pausedTime = 0;
   }
-  setCamera(l.state,
-    optpos ? [l.position[0] + px, l.position[1] + py, l.position[2] + pz] : [l.target[0] + px, l.target[1] + py, l.target[2] + pz],
-    [l.target[0] + tx, l.target[1] + ty, l.target[2] + tz],
-    r*Math.PI/180);
-    l.state.userCamera.setVerticalFoV(fov*Math.PI/180);
+  l.state.userCamera.setVerticalFoV(fov*Math.PI/180);
+  if (mode == 0) {
+    const [px, py, pz, tx, ty, tz, r, optpos] = vparam.split(" ").map(v => parseFloat(v));
+    const cameraMat4 = l.state.userCamera.getTransformMatrix();
+    const targetVec3 = [l.target[0] + tx, l.target[1] + ty, l.target[2] + tz];
+    const positionVec3 = optpos ? [l.position[0] + tx + px, l.position[1] + ty + py, l.position[2] + tz + pz] : [l.target[0] + tx + px, l.target[1] + ty + py, l.target[2] + tz + pz];
+    const rotate = r*Math.PI/180;
+    const up = glm.vec3.fromValues(-Math.sin(rotate), Math.cos(rotate), 0);
+    glm.mat4.targetTo(cameraMat4, positionVec3, targetVec3, up);
+  } else if (mode == 1) {
+    const mat = vparam.split(" ").map(v => parseFloat(v));
+    const cameraMat4 = l.state.userCamera.getTransformMatrix();
+    glm.mat4.copy(cameraMat4, mat);
+  }
   render(l.state);
   return '';
 });

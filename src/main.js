@@ -1,6 +1,6 @@
 import { GltfView } from '@khronosgroup/gltf-viewer';
 import { createDecoderModule } from 'draco3d/draco3d';
-import { vec3, mat4 } from 'gl-matrix';
+import * as glmat from 'gl-matrix';
 
 const canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
@@ -44,10 +44,8 @@ export async function load(glb, hdr) {
   return state;
 }
 
-export function setCamera(state, position, target, rotate) {
-  mat4.targetTo(state.userCamera.getTransformMatrix(), position, target, vec3.fromValues(-Math.sin(rotate), Math.cos(rotate), 0));
-}
-
 export function render(state) {
   view.renderFrame(state, canvas.width, canvas.height);
 }
+
+export const glm = glmat;
